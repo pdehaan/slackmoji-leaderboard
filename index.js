@@ -1,7 +1,6 @@
-import { loadEmojis, parseLeaderboard } from "./lib.js";
+import { parseLeaderboard } from "./lib.js";
 
-const lines = await loadEmojis("./stats.txt");
-const leaderboard = parseLeaderboard(lines, 10);
+const leaderboard = await parseLeaderboard("./stats.txt", 10);
 
 for (const row of leaderboard) {
   console.log(`${row.name}: ${row.count}`);

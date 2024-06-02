@@ -2,17 +2,15 @@ import fs from "node:fs/promises";
 import _chunk from "lodash.chunk";
 import _groupBy from "lodash.groupby";
 
-export async function loadEmojis(file = "./stats.txt") {
-  const res = await fs.readFile(file, "utf-8");
-  // Remove any blank lines
-  return res
-    .trim()
-    .split("\n")
-    .filter((line) => line.trim().length);
-}
-
-export function parseLeaderboard(lines = [], count = 10) {
+/**
+ * Load leaderboard data from a local file and return an array of objects.
+ * @param {string} file Text file to load leaderboard data from.
+ * @param {int} count Max number of leaderboard people.
+ * @returns {object[]} Array of `{name,count}` pairs.
+ */
+export async function parseLeaderboard(file = "./stats.txt", count = 10) {
   const CURR_YEAR = new Date().getFullYear();
+  const lines = await loadEmojis(file);
   const emojis = [];
 
   // Split into chunks of 4 lines...
@@ -26,7 +24,7 @@ export function parseLeaderboard(lines = [], count = 10) {
     emojis.push({ emoji, date: new Date(date), name });
   }
 
-  // Group emojis by uploader, reduce into {name, count} pairs,
+  // Group emojis by uploader, reduce into `{name, count}` pairs,
   // sort by highest count first, grab the top `count` results.
   const grouped = _groupBy(emojis, "name");
   return Object.entries(grouped)
@@ -36,4 +34,13 @@ export function parseLeaderboard(lines = [], count = 10) {
     }, [])
     .sort((a, b) => b.count - a.count)
     .slice(0, count);
+}
+
+async function loadEmojis(file = "./stats.txt") {
+  const res = await fs.readFile(file, "utf-8");
+  // Remove any blank lines
+  return res
+    .trim()
+    .split("\n")
+    .filter((line) => line.trim().length);
 }
