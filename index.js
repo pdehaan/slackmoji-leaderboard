@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import _chunk from "lodash.chunk";
 import _groupBy from "lodash.groupby";
 
 const res = await fs.readFile("./stats.txt", "utf-8");
@@ -6,10 +7,11 @@ const lines = res.split("\n").filter((line) => line.trim().length);
 
 const emojis = [];
 
-for (let num = 0; num < lines.length; num += 4) {
-  const emoji = lines[num + 1];
-  let date = lines[num + 2].replace(/(\d+)(st|nd|rd|th)/, "$1");
-  const name = lines[num + 3];
+// Split into chunks of 4 lines...
+for (let [, emoji, date, name] of _chunk(lines, 4)) {
+  // Remove the fancy date suffixes.
+  date = date.replace(/(\d+)(st|nd|rd|th)/, "$1");
+  // Add in the missing current year.
   if (!date.match(/\s\d{4}$/)) {
     date += `, ${new Date().getFullYear()}`;
   }
@@ -17,6 +19,8 @@ for (let num = 0; num < lines.length; num += 4) {
   emojis.push({ emoji, date, name });
 }
 
+// Group emojis by uploader, reduce into {name, count} pairs,
+// sort by highest count first, grab the top 10 results.
 let grouped = _groupBy(emojis, "name");
 grouped = Object.entries(grouped)
   .reduce((acc, [k, v]) => {

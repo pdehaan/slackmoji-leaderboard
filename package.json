@@ -1,17 +1,26 @@
 {
   "name": "slackmoji-leaderboard",
+  "description": "",
   "version": "1.0.0",
+  "author": "Peter deHaan <peter@deseloper.com>",
+  "bugs": {
+    "url": "https://github.com/pdehaan/slackmoji-leaderboard/issues"
+  },
+  "devDependencies": {
+    "lodash.chunk": "^4.2.0",
+    "lodash.groupby": "^4.6.0"
+  },
+  "homepage": "https://github.com/pdehaan/slackmoji-leaderboard#readme",
+  "keywords": [],
+  "license": "MPL-2.0",
   "main": "index.js",
-  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdehaan/slackmoji-leaderboard.git"
+  },
   "scripts": {
     "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Peter deHaan <peter@deseloper.com>",
-  "license": "MPL-2.0",
-  "description": "",
-  "devDependencies": {
-    "lodash.groupby": "^4.6.0"
-  }
+  "type": "module"
 }
